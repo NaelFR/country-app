@@ -23,30 +23,18 @@
   <main>
     <SearchCountry />
     <div>
-      <ul>
-        <li v-for="country in countries" :key="country.alpha3Code">
-          {{ country.name.common }}
-        </li>
-      </ul>
       <div class="relative w-full h-96">
         <MapComponent />
       </div>
+      <VisitedCountriesList />
     </div>
   </main>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
 import MapComponent from "./components/MapComponent.vue";
 import SearchCountry from "./components/SearchCountry.vue";
-
-const countries = ref();
-
-onMounted(async () => {
-  const res = await fetch("https://restcountries.com/v3.1/all");
-  countries.value = await res.json();
-  console.log("data", countries.value);
-});
+import VisitedCountriesList from "./components/VisitedCountriesList.vue";
 </script>
 
 <style></style>

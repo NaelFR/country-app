@@ -9,10 +9,33 @@
       placeholder="Rechercher un pays"
       @input="debouncedSearch"
     />
+
+    <div>
+      <ul class="space-y-2">
+        <li
+          class="flex"
+          v-for="resultCountry in resultCountries"
+          :key="resultCountry.id"
+        >
+          <span>{{ resultCountry.name.common }}</span>
+          <button
+            @click="addToVisitedCountries(resultCountry)"
+            class="form-input ml-auto border-green-300 bg-green-200 rounded-md"
+          >
+            Ajouter
+          </button>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 <script lang="ts" setup>
+import { ref } from "vue";
 import { debounce } from "@/debounce";
+import { useCountries } from "../store";
+const { addToVisitedCountries } = useCountries();
+
+const resultCountries = ref();
 
 async function searchCountry(event: Event) {
   const searchValue = (event.target as HTMLInputElement)?.value;
@@ -25,7 +48,7 @@ async function searchCountry(event: Event) {
   );
 
   const data = await result.json();
-  console.log("result", data);
+  resultCountries.value = data;
 }
 
 let [debouncedSearch] = debounce(searchCountry, 300);
